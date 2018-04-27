@@ -37,15 +37,15 @@ Note: make sure that the Python.h file path is right. usually in most systems yo
 
 
 Input data you can use to test it is:
-*Goal State - x position: 164.5
-*Goal State - y position: 5.7
-*Goal State - heading angle (theta): 0
-*Goal State - velocity: 6
-*Goal State - curvature (kappa): 0
-*Road Width - 10
-*Car weight - 2273
-*Starting x position - 121
-*Starting y position - 8.8
-*Starting velocity - 4.58
+* Goal State - x position: 164.5
+* Goal State - y position: 5.7
+* Goal State - heading angle (theta): 0
+* Goal State - velocity: 6
+* Goal State - curvature (kappa): 0
+* Road Width - 10
+* Car weight - 2273
+* Starting x position - 121
+* Starting y position - 8.8
+* Starting velocity - 4.58
 
-This data was provided by [LC_NGSIM]{https://github.com/donnydcy/LC_NGSIM}.
+This data was provided by [LC_NGSIM](https://github.com/donnydcy/LC_NGSIM).
