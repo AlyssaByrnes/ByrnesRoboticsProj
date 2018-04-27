@@ -103,6 +103,9 @@ def runStateLattice(goal):
 # Here we take the result of run state lattice and append it to the dReach file
 # Each time we generate a new problem we can either proceed to the next trajectory segment or declare
 # the controller to be unsafe.
+####################################################################################################
+###                     MODIFIED                                                                 ###
+####################################################################################################
 
 def writeController(result, traj_num, des_v):
     # Create name for new dReach instance
@@ -159,7 +162,9 @@ def writeController(result, traj_num, des_v):
     
     dreach_instance.close()
     return filename
-
+####################################################################################################
+###                  END   MODIFIED                                                              ###
+####################################################################################################
 ####################################################################################################
 # Runs dReach and returns TRUE if successful
 # Arguments are the modelPath (controller instance), number of steps,
