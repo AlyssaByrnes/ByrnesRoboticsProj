@@ -120,20 +120,4 @@
 
 }
 
-//init: 
-//@1 (and (sx>=0) (sx<=0.5) (sy>=0) (sy<=0.05) (v>=10.9) (v=11.1) (sx_d=0) (sy_d=0) 
-  //  (Psi>=0) (Psi<=0.1) (Psi_dot=0) (Beta=0) (delta=0) (tau=0) 
-    //(Psi_d=0) (Psi_dot_d=0)
-    //(sx_env=15) (kappa_d=0) (waypointx=15) (waypointy=5));
-//init:
-//@1 (and (sx=0) (sy=0) (v=4.5) (sx_d=0) (sy_d=0)
- //   (Psi=0) (Psi_dot=0) (Beta=0) (delta=0) (tau=0)
-  //  (Psi_d=0) (Psi_dot_d=0) (sx_env=15)(kappa_d=0.01) (waypointx=15) (waypointy=5));
 
-
-//goal:
-//@1 (tau=1);
-//@1 (or (and (sy<w) (tau>2) (tau<3)) (and (sy<w) (sx>sx_env)));
-//@1 (and (sy>w) (sx>sx_env));
-//@1 (and (sy<w) (sx>sx_env));
-//@1 ((and (sy<w) (tau=3) ));

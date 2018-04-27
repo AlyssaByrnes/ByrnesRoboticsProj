@@ -2,12 +2,12 @@
 //Desired Velocity of Ego Vehicle
 #define v_d (6.000000)
 #define w (10.000000)
-#define m (2273.000000)
+#define m (2207.000000)
 //Trajectory
-#define s (164.678694)
+#define s (16.173812)
 #define kappa_0 (0.000000)
-#define kappa_1 (0.000936)
-#define kappa_2 (-0.000936)
+#define kappa_1 (0.215389)
+#define kappa_2 (-0.215389)
 #define kappa_3 (0.000000)
 
 // SCENARIO PARAMETERS //
@@ -150,6 +150,6 @@
 //@1 (and (sy<w) (sx>sx_env));
 //@1 ((and (sy<w) (tau=3) ));
 init:
-@1 (and (sx=(121.000000)) (sy=(8.800000)) (v=(4.580000)) (sx_d=0) (sy_d=0) (Psi=0) (Psi_dot=0) (Beta=0) (delta=0) (tau=0)(Psi_d=0) (Psi_dot_d=0) (sx_env=15) (kappa_d=0.01) (waypointx=15) (waypointy=5));
+@1 (and (sx=(0.000000)) (sy=(0.000000)) (v=(4.000000)) (sx_d=0) (sy_d=0) (Psi=0) (Psi_dot=0) (Beta=0) (delta=0) (tau=0)(Psi_d=0) (Psi_dot_d=0) (sx_env=15) (kappa_d=0.01) (waypointx=15) (waypointy=5));
 goal:
 @1 (and (sy<w) (sx>sx_env));
