@@ -6,7 +6,7 @@ A lot of this work and README was taken and modified from [Apex](https://github.
 
 ## Dependencies - SWIG and Armadillo
 
-`brew install swig` </ br>
+`brew install swig` 
 
 `brew install armadillo`
 
