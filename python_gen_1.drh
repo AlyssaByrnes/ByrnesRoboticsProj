@@ -1,8 +1,13 @@
+//Car Info
+//Desired Velocity of Ego Vehicle
+#define v_d (6.000000)
+#define w (10.000000)
+#define m (2273.000000)
 //Trajectory
-#define s (22.220000)
+#define s (164.678694)
 #define kappa_0 (0.000000)
-#define kappa_1 (-0.000000)
-#define kappa_2 (0.000000)
+#define kappa_1 (0.000936)
+#define kappa_2 (-0.000936)
 #define kappa_3 (0.000000)
 
 // SCENARIO PARAMETERS //
@@ -11,55 +16,10 @@
 // Soonho can you add a feature for a floating point representation of pi, e, etc...?
 #define pi 3.14159265359
 
-// Width of road
-#define w 3.7
-
-// Desired velocity of ego vehicle
-#define v_d 11.1
-// 11.11
-
-
-// Waypoints X: Lane 1
-#define L1_waypoint1x 5.00
-#define L1_waypoint2x 10.00
-#define L1_waypoint15x 15.00
-
-// Note: here I would prefer to define an array ie waypointsLane1x [15.00, 20.00,...40.00]
-// Similarly I would like to do the same thing for the lane boundarys...
-
-// Waypoints Y: Lane 1
-#define L1_waypoint1y 1.00
-#define L1_waypoint2y 1.00
-#define L1_waypoint3y 1.00
-
-// Note: here I would prefer to define an array ie waypointsLane1y 
-// To do: Write script to automatically generate these follow naming convention as above
-
-// Waypoints: Lane 2
-
-// Waypoints X: Lane 1
-#define L2_waypoint1x 5.00
-#define L2_waypoint2x 10.00
-#define L2_waypoint15x 15.00
-
-// Waypoints Y: Lane 1
-#define L2_waypoint1y 4.70
-#define L2_waypoint2y 4.70
-#define L2_waypoint3y 4.70
-
-// Left Boundary: Lane 1
-
-// Right Boundary: Lane 1
-
-// Left Boundary: Lane 1
-
-// Right Boundary: Lane 2
-
-// Left Boundary: Lane 2
 
 // VEHICLE PARAMETERS //
 // Constants
-#define m  2273.0
+
 #define Iz 4423.0
 #define Cf 108000.0
 #define Cr 108000.0
@@ -95,8 +55,8 @@
 [-2,2.04] Psi;
 [-2,2.05] Psi_dot;
 [10.8,11.1] v; // 6,12
-[0,0.5] sx; // 100
-[0,0.1] sy; // 100
+[120,130] sx; // 100
+[0,10] sy; // 100
 [-2, 2.04] delta;
 [0, 3.1] time;
 [-2,2.06] kappa_d;
@@ -177,15 +137,19 @@
   //  (Psi>=0) (Psi<=0.1) (Psi_dot=0) (Beta=0) (delta=0) (tau=0) 
     //(Psi_d=0) (Psi_dot_d=0)
     //(sx_env=15) (kappa_d=0) (waypointx=15) (waypointy=5));
-init: 
-@1 (and (sx=0) (sy=0) (v=10.9) (sx_d=0) (sy_d=0) 
-    (Psi=0) (Psi_dot=0) (Beta=0) (delta=0) (tau=0) 
-    (Psi_d=0) (Psi_dot_d=0) (sx_env=15) (kappa_d=0.01) (waypointx=15) (waypointy=5));
+//init:
+//@1 (and (sx=0) (sy=0) (v=4.5) (sx_d=0) (sy_d=0)
+ //   (Psi=0) (Psi_dot=0) (Beta=0) (delta=0) (tau=0)
+  //  (Psi_d=0) (Psi_dot_d=0) (sx_env=15)(kappa_d=0.01) (waypointx=15) (waypointy=5));
 
 
-goal:
-@1 (tau=1);
+//goal:
+//@1 (tau=1);
 //@1 (or (and (sy<w) (tau>2) (tau<3)) (and (sy<w) (sx>sx_env)));
 //@1 (and (sy>w) (sx>sx_env));
 //@1 (and (sy<w) (sx>sx_env));
 //@1 ((and (sy<w) (tau=3) ));
+init:
+@1 (and (sx=(121.000000)) (sy=(8.800000)) (v=(4.580000)) (sx_d=0) (sy_d=0) (Psi=0) (Psi_dot=0) (Beta=0) (delta=0) (tau=0)(Psi_d=0) (Psi_dot_d=0) (sx_env=15) (kappa_d=0.01) (waypointx=15) (waypointy=5));
+goal:
+@1 (and (sy<w) (sx>sx_env));

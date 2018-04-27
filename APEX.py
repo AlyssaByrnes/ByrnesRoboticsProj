@@ -46,6 +46,8 @@ import subprocess
 import shutil
 import trajectorygenerator
 import ctypes
+import csv
+import time
 
 # Will not work without dReach installed
 NO_TOOL_EXIT_CODE = 125;
@@ -63,12 +65,13 @@ debug_dreach = False;
 # We need to add a means of choosing the next waypoint, preferably equivalent to planner algorithm
 
 def getNextGoal():
-    # Depth first search on BDD produced by behavior controller
-
-    # Change so that it reads from the csv file...
-    goalLC = (50.7553, 2.04623, 0.0726169, 11.1111, 0.0)
-    goalLF= (22.22, 0.00, 0.00, 11.1, 0.0)
-    return goalLF
+    goal = [0,0,0,0,0]
+    goal[0] = float(input("Goal State - x position: "))
+    goal[1] = float(input("Goal State - y position: "))
+    goal[2] = float(input("Goal State - heading angle (theta): "))
+    goal[3] = float(input("Goal State - velocity: "))
+    goal[4] = float(input("Goal State - curvature (kappa): "))
+    return goal
 
 
 ####################################################################################################
@@ -78,17 +81,22 @@ def getNextGoal():
 # We will implement a series of shortened versions of the trajectories
 # This is where we could make a profiling based hardware in the loop style argument
 
-def runStateLattice(goal,mode):
-    if mode == "LC":
-        temp = trajectorygenerator.trajectoryGenerator(goal[0], goal[1],goal[2], goal[3], goal[4]);
-        result = ctypes.cast(temp.__long__(),ctypes.POINTER(ctypes.c_double))
-        print result[0:4]
-    else:
-        temp = trajectorygenerator.trajectoryGenerator(goal[0], goal[1],goal[2], goal[3], goal[4]);
-        result = ctypes.cast(temp.__long__(),ctypes.POINTER(ctypes.c_double))
-        print result[0:4]
+####################################################################################################
+###                     MODIFIED                                                                 ###
+####################################################################################################
 
+
+def runStateLattice(goal):
+    temp = trajectorygenerator.trajectoryGenerator(goal[0], goal[1],goal[2], goal[3], goal[4]);
+    result = ctypes.cast(temp.__long__(),ctypes.POINTER(ctypes.c_double))
+    print result[0:4]
     return result;
+
+####################################################################################################
+###                  END   MODIFIED                                                              ###
+####################################################################################################
+
+
 
 ####################################################################################################
 # Append controller to system model and generate drh file
@@ -96,12 +104,23 @@ def runStateLattice(goal,mode):
 # Each time we generate a new problem we can either proceed to the next trajectory segment or declare
 # the controller to be unsafe.
 
-def writeController(result, traj_num):
+def writeController(result, traj_num, des_v):
     # Create name for new dReach instance
     filename = "python_gen_%d.drh" % traj_num
 
     # Open new dReach instance
     controller_object = open(filename,"w")
+    # Write trajectory description
+    controller_object.write("//Car Info\n")
+    controller_object.write("//Desired Velocity of Ego Vehicle\n")
+    controller_object.write("#define v_d (%f)\n" % des_v)
+    rw = input("Road Width? " ) #10 maybe 5
+    controller_object.write("#define w (%f)\n" % rw)
+    x = input("Car weight? " ) #2273.0
+    controller_object.write("#define m (%f)\n" % x)
+    
+    
+    
 
     # Write trajectory description
     controller_object.write("//Trajectory\n")
@@ -125,6 +144,19 @@ def writeController(result, traj_num):
     # Append base file information
     dreach_instance.writelines(dynamics_string)
     base_file.close()
+    
+    #Write init conditions
+    dreach_instance.write("init:\n")
+    x = input("Starting x position? " )
+    y = input("Starting y position? " )
+    v = input("Starting velocity? " )
+    dreach_instance.write("@1 (and (sx=(%f)) (sy=(%f)) (v=(%f)) (sx_d=0) (sy_d=0) (Psi=0) (Psi_dot=0) (Beta=0) (delta=0) (tau=0)(Psi_d=0) (Psi_dot_d=0) (sx_env=15) (kappa_d=0.01) (waypointx=15) (waypointy=5));\n" %(x,y,v))
+    
+    # Write goal
+    dreach_instance.write("goal:\n")
+    dreach_instance.write("@1 (and (sy<w) (sx>sx_env));\n")
+    
+    
     dreach_instance.close()
     return filename
 
@@ -222,8 +254,12 @@ def runCheckStderr(runParams, stdin=None, stdout=None):
 # creates a dReach instance for the problem instance
 
 goal = getNextGoal();
-result = runStateLattice(goal,"LF");
-problem_instance = writeController(result,1);
+print "Goal: "
+print goal
+print "Determining Trajectory..."
+result = runStateLattice(goal);
+print "Writing information to file."
+problem_instance = writeController(result,1, goal[3]);
 
 #if len(sys.argv) != 3 and len(sys.argv) != 4:
 #    print "Expected 2 or 3 arguments: <dreach version> <model file path> <output image file path>"
@@ -264,9 +300,12 @@ delta = .1; #0.25;
 
 # Turn off verbose output
 verbose = False;
-
+time_start = time.clock()
+print "Checking Model"
 # run dreach
 if runDreach(modelPath, k, delta, verbose, version) == False:
     sys.exit(1);
-
+time_elapsed = (time.clock() - time_start)
+print "Model checking time: "
+print time_elapsed
 ####################################################################################################
